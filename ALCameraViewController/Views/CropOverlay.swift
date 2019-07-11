@@ -34,7 +34,7 @@ internal class CropOverlay: UIView {
         return self.cornerButtonWidth * self.outterGapRatio
     }
 
-    var isResizable: Bool = false
+    var resizingMode: CroppingParameters.ResizingMode = .none
     var isMovable: Bool = false
     var minimumSize: CGSize = CGSize.zero
 
@@ -130,7 +130,6 @@ internal class CropOverlay: UIView {
     }
 	
     func createLines() {
-        
         outerLines = [createLine(), createLine(), createLine(), createLine()]
         horizontalLines = [createLine(), createLine()]
         verticalLines = [createLine(), createLine()]
@@ -165,26 +164,20 @@ internal class CropOverlay: UIView {
 	}
 	
 	@objc func moveCropOverlay(gestureRecognizer: UIPanGestureRecognizer) {
-		if isResizable, let button = gestureRecognizer.view as? UIButton {
+		if resizingMode != .none, let button = gestureRecognizer.view as? UIButton {
 			if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
 				let translation = gestureRecognizer.translation(in: self)
 				
-				var newFrame: CGRect
-				
-				switch button {
-				case cornerButtons[0]:	// Top Left
-                    newFrame = CGRect(x: frame.origin.x + translation.x, y: frame.origin.y + translation.y, width: frame.size.width - translation.x, height: frame.size.height - translation.y)
-				case cornerButtons[1]:	// Top Right
-					newFrame = CGRect(x: frame.origin.x, y: frame.origin.y + translation.y, width: frame.size.width + translation.x, height: frame.size.height - translation.y)
-				case cornerButtons[2]:	// Bottom Left
-					newFrame = CGRect(x: frame.origin.x + translation.x, y: frame.origin.y, width: frame.size.width - translation.x, height: frame.size.height + translation.y)
-				case cornerButtons[3]:	// Bottom Right
-					newFrame = CGRect(x: frame.origin.x, y: frame.origin.y, width: frame.size.width + translation.x, height: frame.size.height + translation.y)
-				default:
-					newFrame = CGRect.zero
+				let newFrame: CGRect
+				if resizingMode == .rectangle {
+					newFrame = getNewRectangleFrame(translation: translation, button: button)
+				} else {
+					newFrame = getNewSquareFrame(translation: translation, button: button)
 				}
-
-                let minimumFrame = CGRect(x: newFrame.origin.x, y: newFrame.origin.y, width: max(newFrame.size.width, minimumSize.width + 2 * outterGap), height: max(newFrame.size.height, minimumSize.height + 2 * outterGap))
+				
+                let minimumFrame = CGRect(x: newFrame.origin.x, y: newFrame.origin.y,
+										  width: max(newFrame.size.width, minimumSize.width + 2 * outterGap),
+										  height: max(newFrame.size.height, minimumSize.height + 2 * outterGap))
 				frame = minimumFrame
 				layoutSubviews()
 
@@ -194,16 +187,61 @@ internal class CropOverlay: UIView {
 			if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
 				let translation = gestureRecognizer.translation(in: self)
 				
-				gestureRecognizer.view!.center = CGPoint(x: gestureRecognizer.view!.center.x + translation.x, y: gestureRecognizer.view!.center.y + translation.y)
+				gestureRecognizer.view!.center = CGPoint(x: gestureRecognizer.view!.center.x + translation.x,
+														 y: gestureRecognizer.view!.center.y + translation.y)
 				gestureRecognizer.setTranslation(CGPoint(x: 0, y: 0), in: self)
 			}
+		}
+	}
+	
+	private func getNewRectangleFrame(translation: CGPoint, button: UIButton) -> CGRect {
+		switch button {
+		case cornerButtons[0]: // Top Left
+			return CGRect(x: frame.origin.x + translation.x, y: frame.origin.y + translation.y,
+						  width: frame.size.width - translation.x, height: frame.size.height - translation.y)
+		case cornerButtons[1]: // Top Right
+			return CGRect(x: frame.origin.x, y: frame.origin.y + translation.y, width: frame.size.width + translation.x,
+						  height: frame.size.height - translation.y)
+		case cornerButtons[2]: // Bottom Left
+			return CGRect(x: frame.origin.x + translation.x, y: frame.origin.y, width: frame.size.width - translation.x,
+						  height: frame.size.height + translation.y)
+		case cornerButtons[3]: // Bottom Right
+			return CGRect(x: frame.origin.x, y: frame.origin.y, width: frame.size.width + translation.x,
+						  height: frame.size.height + translation.y)
+		default: return .zero
+		}
+	}
+	
+	private func getNewSquareFrame(translation: CGPoint, button: UIButton) -> CGRect {
+		let distance = max(abs(translation.x), abs(translation.y))
+		let dx = translation.x < 0 ? -distance : distance
+		let dy = translation.y < 0 ? -distance : distance
+		
+		switch button {
+		case cornerButtons[0]: // Top Left
+			guard dx > 0 && dy > 0 || dx < 0 && dy < 0 else { return frame }
+			return CGRect(x: frame.origin.x + dx, y: frame.origin.y + dy, width: frame.size.width - dx,
+						  height: frame.size.height - dy)
+		case cornerButtons[1]: // Top Right
+			guard dx > 0 && dy < 0 || dx < 0 && dy > 0 else { return frame }
+			return CGRect(x: frame.origin.x, y: frame.origin.y + dy, width: frame.size.width + dx,
+						  height: frame.size.height - dy)
+		case cornerButtons[2]: // Bottom Left
+			guard dx < 0 && dy > 0 || dx > 0 && dy < 0 else { return frame }
+			return CGRect(x: frame.origin.x + dx, y: frame.origin.y, width: frame.size.width - dx,
+						  height: frame.size.height + dy)
+		case cornerButtons[3]: // Bottom Right
+			guard dx > 0 && dy > 0 || dx < 0 && dy < 0 else { return frame }
+			return CGRect(x: frame.origin.x, y: frame.origin.y, width: frame.size.width + dx,
+						  height: frame.size.height + dy)
+		default: return .zero
 		}
 	}
 
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         let view = super.hitTest(point, with: event)
 
-        if !isMovable && isResizable && view != nil {
+        if !isMovable && resizingMode != .none && view != nil {
             let isButton = cornerButtons.reduce(false) { $1.hitTest(convert(point, to: $1), with: event) != nil || $0 }
             if !isButton {
                 return nil
