@@ -189,7 +189,8 @@ public class CameraView: UIView {
     public func capturePhoto(completion: @escaping CameraShotCompletion) {
         isUserInteractionEnabled = false
 
-        guard let output = imageOutput, let orientation = AVCaptureVideoOrientation(rawValue: UIDevice.current.orientation.rawValue) else {
+        guard let output = imageOutput,
+			let orientation = AVCaptureVideoOrientation(rawValue: UIDevice.current.orientation.rawValue) else {
             completion(nil)
             return
         }
@@ -236,13 +237,11 @@ public class CameraView: UIView {
         
         do {
             try device.lockForConfiguration()
-            if device.flashMode == .on {
-                device.flashMode = .off
-            } else if device.flashMode == .off {
-                device.flashMode = .auto
-            } else {
-                device.flashMode = .on
-            }
+			switch  device.flashMode {
+			case .on: device.flashMode = .off; break
+			case .off: device.flashMode = .auto; break
+			default: device.flashMode = .on
+			}
             device.unlockForConfiguration()
         } catch _ { }
     }
@@ -295,5 +294,4 @@ public class CameraView: UIView {
             default: break
         }
     }
-    
 }
