@@ -17,25 +17,19 @@ A camera view controller with custom image picker and image cropping.
 - [x] Tap to focus
 
 ### Installation & Requirements
-This project requires Xcode 9 to run and compiles with swift 4
+This project requires Xcode 12 to run and compiles with swift 5
 > Note: This library makes use of the AVFoundation camera API's which are unavailable on the iOS simulator. You'll need a real device to run it.
 
 CocoaPods:
 Add the following to your Podfile:
 
 ```ruby
-pod 'ALCameraViewController'
+pod 'ALCameraViewControllerFork'
 ```
-> For swift 3.2 support
+> For swift 4 support
 
 ```ruby
-pod 'ALCameraViewController', '~> 2.0.3'
-```
-
-Carthage:
-
-```ruby
-github "alexlittlejohn/ALCameraViewController"
+pod 'ALCameraViewControllerFork', '~> 3.0.3'
 ```
 
 
@@ -81,7 +75,7 @@ The Cropping Parameters struct accepts the following parameters
 
 ```swift
 init(isEnabled: Bool = false,
-     allowResizing: Bool = true,
+     resizingMode: ResizingMode = .rectangle,
      allowMoving: Bool = true,
      minimumSize: CGSize = CGSize(width: 60, height: 60))
 ```
