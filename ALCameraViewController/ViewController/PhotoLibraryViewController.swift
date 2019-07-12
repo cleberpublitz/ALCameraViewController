@@ -43,7 +43,7 @@ public class PhotoLibraryViewController: UIViewController {
         let buttonImage = UIImage(named: "libraryCancel", in: CameraGlobals.shared.bundle, compatibleWith: nil)?.withRenderingMode(UIImage.RenderingMode.alwaysOriginal)
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: buttonImage,
-                                                           style: UIBarButtonItem.Style.plain,
+                                                           style: .plain,
                                                            target: self,
                                                            action: #selector(dismissLibrary))
         

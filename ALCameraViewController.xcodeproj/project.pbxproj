@@ -126,11 +126,11 @@
 		FAB50BEA1B413E41009905B9 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
-				FAB50BF91B413E8C009905B9 /* PhotoLibraryViewController.swift */,
 				FAF058651B316695008E5592 /* CameraViewController.swift */,
+				EBF7829B1CB2C04300DE3E63 /* CameraViewControllerConstraint.swift */,
 				FA7E6B9A1B429012000E1B14 /* ConfirmViewController.swift */,
 				C4768BFF1CAF2EA100A084F8 /* ConfirmViewController.xib */,
-				EBF7829B1CB2C04300DE3E63 /* CameraViewControllerConstraint.swift */,
+				FAB50BF91B413E8C009905B9 /* PhotoLibraryViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -138,10 +138,10 @@
 		FAB50BEB1B413E4E009905B9 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				FAB50BEE1B413E8C009905B9 /* ImageCell.swift */,
-				FA5FA3421B3AFA2B00497C62 /* PermissionsView.swift */,
 				FAF058671B3175C5008E5592 /* CameraView.swift */,
 				FA787F1B1B4326F100B6B86E /* CropOverlay.swift */,
+				FAB50BEE1B413E8C009905B9 /* ImageCell.swift */,
+				FA5FA3421B3AFA2B00497C62 /* PermissionsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -149,17 +149,17 @@
 		FAB50C021B4140AB009905B9 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				FAB50BF01B413E8C009905B9 /* ImageFetcher.swift */,
-				C40665431C73A47C00EB9751 /* SingleImageSaver.swift */,
-				C40665471C73B72D00EB9751 /* SingleImageFetcher.swift */,
-				FA8231391B3C296C00A837BE /* Utilities.swift */,
-				FAF058691B317894008E5592 /* CameraShot.swift */,
 				C40665451C73A94100EB9751 /* CameraGlobals.swift */,
-				C44543201CA68DDE00644380 /* VolumeControl.swift */,
+				FAF058691B317894008E5592 /* CameraShot.swift */,
+				7AC96FA11F5B5166003E53F4 /* CroppingParameters.swift */,
+				FAB50BF01B413E8C009905B9 /* ImageFetcher.swift */,
 				C4D9BA441CA7224B004F70F7 /* PhotoLibraryAuthorizer.swift */,
+				C40665471C73B72D00EB9751 /* SingleImageFetcher.swift */,
+				C40665431C73A47C00EB9751 /* SingleImageSaver.swift */,
 				C4D9BA461CA73163004F70F7 /* UIButtonExtensions.swift */,
 				EBFE097C1CAF1D1A00A8C637 /* UIViewExtensions.swift */,
-				7AC96FA11F5B5166003E53F4 /* CroppingParameters.swift */,
+				FA8231391B3C296C00A837BE /* Utilities.swift */,
+				C44543201CA68DDE00644380 /* VolumeControl.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -186,11 +186,11 @@
 		FAF058411B31618D008E5592 /* ALCameraViewController */ = {
 			isa = PBXGroup;
 			children = (
+				FA8231371B3BF8F700A837BE /* CameraView.strings */,
+				FA5FA3441B3AFEB300497C62 /* CameraViewAssets.xcassets */,
 				FAB50C021B4140AB009905B9 /* Utilities */,
 				FAB50BEA1B413E41009905B9 /* ViewController */,
 				FAB50BEB1B413E4E009905B9 /* Views */,
-				FA8231371B3BF8F700A837BE /* CameraView.strings */,
-				FA5FA3441B3AFEB300497C62 /* CameraViewAssets.xcassets */,
 			);
 			path = ALCameraViewController;
 			sourceTree = "<group>";

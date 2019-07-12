@@ -170,7 +170,6 @@ open class CameraViewController: UIViewController {
         self.allowVolumeButtonCapture = allowVolumeButtonCapture
         super.init(nibName: nil, bundle: nil)
         onCompletion = completion
-        cameraOverlay.isHidden = !croppingParameters.isEnabled
         cameraOverlay.isUserInteractionEnabled = false
         libraryButton.isEnabled = allowsLibraryAccess
         libraryButton.isHidden = !allowsLibraryAccess
@@ -391,6 +390,15 @@ open class CameraViewController: UIViewController {
             swapButton,
             libraryButton].forEach({ $0.isEnabled = enabled })
     }
+	
+	/**
+	 * Toggle the camera overlay, based on the actual state of the camera and crop image isEnabled
+	 */
+	private func toggleCameraOverlay(enabled: Bool) {
+		if croppingParameters.isEnabled {
+			cameraOverlay.isHidden = !enabled
+		}
+	}
     
     @objc func rotateCameraView() {
         cameraView.rotatePreview()
@@ -505,9 +513,11 @@ open class CameraViewController: UIViewController {
         
         if connection.isEnabled {
             toggleButtons(enabled: false)
+			toggleCameraOverlay(enabled: false)
             cameraView.capturePhoto { [weak self] image in
                 guard let image = image else {
                     self?.toggleButtons(enabled: true)
+					self?.toggleCameraOverlay(enabled: true)
                     return
                 }
                 self?.saveImage(image: image)
@@ -528,6 +538,7 @@ open class CameraViewController: UIViewController {
             }
             .onFailure { [weak self] error in
                 self?.toggleButtons(enabled: true)
+				self?.toggleCameraOverlay(enabled: true)
                 self?.showNoPermissionsView(library: true)
                 self?.cameraView.preview.isHidden = false
                 self?.hideSpinner(spinner)
@@ -585,12 +596,14 @@ open class CameraViewController: UIViewController {
 		cameraView.stopSession()
 		startConfirmController(uiImage: uiImage)
 		toggleButtons(enabled: true)
+		toggleCameraOverlay(enabled: true)
 	}
 	
     internal func layoutCameraResult(asset: PHAsset) {
         cameraView.stopSession()
         startConfirmController(asset: asset)
         toggleButtons(enabled: true)
+		toggleCameraOverlay(enabled: true)
     }
 	
 	private func startConfirmController(uiImage: UIImage) {

@@ -126,7 +126,6 @@ internal class CropOverlay: UIView {
 			hLine.frame = CGRect(x: outterGap, y: vSpacing + outterGap, width: bounds.width - outterGap * 2, height:  lineThickness)
 			vLine.frame = CGRect(x: hSpacing + outterGap, y: outterGap, width: lineThickness, height: bounds.height - outterGap * 2)
         }
-		
     }
 	
     func createLines() {
