@@ -1,6 +1,12 @@
 Pod::Spec.new do |spec|
   spec.name               = "ALCameraViewControllerFork"
+<<<<<<< HEAD
+  spec.version            = "3.0.6"
+||||||| merged common ancestors
+  spec.version            = "3.0.5"
+=======
   spec.version            = "3.0.7"
+>>>>>>> release/3.0.7
   spec.summary            = "A camera view controller with custom image picker and image cropping."
   spec.source             = { :git => "https://github.com/cleberpublitz/ALCameraViewController.git", :tag => spec.version.to_s }
   spec.requires_arc       = true
