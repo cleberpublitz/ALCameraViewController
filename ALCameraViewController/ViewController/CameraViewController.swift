@@ -170,6 +170,7 @@ open class CameraViewController: UIViewController {
         self.allowVolumeButtonCapture = allowVolumeButtonCapture
         super.init(nibName: nil, bundle: nil)
         onCompletion = completion
+		cameraOverlay.isHidden = true
         cameraOverlay.isUserInteractionEnabled = false
         libraryButton.isEnabled = allowsLibraryAccess
         libraryButton.isHidden = !allowsLibraryAccess
